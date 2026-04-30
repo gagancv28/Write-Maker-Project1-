@@ -1,26 +1,72 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-space: "Space Grotesk", sans-serif;
+  --font-inter: "Inter", sans-serif;
+
+  --color-brand-bg: #051424;
+  --color-brand-primary: #ebb2ff;
+  --color-brand-secondary: #c3c6d7;
+  --color-brand-tertiary: #00dbe9;
+  --color-brand-surface: #051424;
+  --color-brand-surface-bright: #2c3a4c;
+  --color-brand-surface-container: #122131;
+  --color-brand-surface-variant: #273647;
+  
+  --radius-brand-sm: 4px;
+  --radius-brand-lg: 8px;
+
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  --color-background: #051424;
+  --color-foreground: #d4e4fa;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+
+@layer base {
+  body {
+    @apply bg-brand-bg text-foreground font-inter antialiased selection:bg-brand-primary/30;
+    background-image: 
+      radial-gradient(circle at 50% 0%, #122131 0%, transparent 50%),
+      radial-gradient(circle at 0% 100%, #0d1c2d 0%, transparent 40%);
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-space;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .glass {
+    background-color: rgb(255 255 255 / 0.05);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgb(255 255 255 / 0.10);
+  }
+
+  .glass-card {
+    background-color: rgb(255 255 255 / 0.05);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgb(255 255 255 / 0.10);
+    border-radius: var(--radius-brand-lg);
+    transition: all 300ms;
+  }
+
+  .glass-card:hover {
+    border-color: rgb(235 178 255 / 0.30);
+    background-color: rgb(255 255 255 / 0.10);
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 20px -5px rgba(235, 178, 255, 0.4);
+  }
+
+  .glow-text-primary {
+    text-shadow: 0 0 10px rgba(235, 178, 255, 0.5);
+  }
+
+  .telemetry-line {
+    @apply h-px bg-gradient-to-r from-transparent via-brand-tertiary/30 to-transparent w-full;
+  }
 }

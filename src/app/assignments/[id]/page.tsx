@@ -76,7 +76,7 @@ export default async function AssignmentDetailPage({
     }
     // Note: revalidatePath removed — Pusher handles the UI update in real time
   }
-  }
+  
   // ─────────────────────────────────────────────────────────────────────────
 
   const statusColors: Record<string, string> = {

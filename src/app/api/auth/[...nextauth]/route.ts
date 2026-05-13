@@ -16,16 +16,28 @@ const handler = NextAuth({
           return null;
         }
         try {
-          const user = await prisma.user.findUnique({
-            where: { email: credentials.email }
-          });
+  const user = await prisma.user.findUnique({
+    where: { email: credentials.email }
+  });
 
-          if (!user) return null;
-          const passwordsMatch = await bcrypt.compare(credentials.password, user.passwordHash);
-          if (!passwordsMatch) return null;
+  // THE FIX: We check if the user exists AND if they have a passwordHash.
+  // If either is missing, we stop here.
+  if (!user || !user.passwordHash) {
+    return null;
+  }
 
-          return { id: user.id, name: user.name, email: user.email, role: user.role as string };
-        } catch (error) {
+  // Now TypeScript knows for a fact that user.passwordHash is a string.
+  const passwordsMatch = await bcrypt.compare(credentials.password, user.passwordHash);
+  
+  if (!passwordsMatch) return null;
+
+  return { 
+    id: user.id, 
+    name: user.name, 
+    email: user.email, 
+    role: user.role as string 
+  };
+} catch (error) {
           console.error("AUTH ERROR:", error);
           return null;
         }

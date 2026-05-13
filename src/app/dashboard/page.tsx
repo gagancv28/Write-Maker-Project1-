@@ -51,12 +51,22 @@ export default async function DashboardPage() {
       data: { status: "COMPLETED" },
       include: { client: { select: { email: true, name: true } }, writer: { select: { name: true } } }
     });
-
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { completedAssignmentsCount: { increment: 1 } }
-    });
-
+// Add this check to ensure user exists before calling the update
+if (user && user.id) {
+  await prisma.user.update({
+    where: { 
+      id: user.id 
+    },
+    data: { 
+      completedAssignmentsCount: { 
+        increment: 1 
+      } 
+    }
+  });
+} else {
+  // This handles the case where the user is null or undefined
+  console.warn("Update skipped: No valid user found.");
+}
     // Email the client
     if (process.env.RESEND_API_KEY && assignment.client?.email) {
       await resend.emails.send({
